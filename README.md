@@ -7,7 +7,7 @@ I found a site online that extracted codes from `https://fontawesome.com/cheatsh
 I quickly decided to create mine using a C# .Net Console Application and the HTMLAgility Nuget package.
 Steps to recreate:
 * Visit `https://fontawesome.com/cheatsheet`
-* Inspect the source, locate the body, expand it, locate <div class="ph4 ph6-ns pv6 ph0-pr pv0-pr bg-white"> minimize the it, right click, click copy.
+* Inspect the source, locate the body, expand it, locate ```<div class="ph4 ph6-ns pv6 ph0-pr pv0-pr bg-white">``` minimize the it, right click, click copy.
 * Add an html file to your project and set build to 'copy always' and paste the code into the file.
 
 Browse the source to see the full codes.
