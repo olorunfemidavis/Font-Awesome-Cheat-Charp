@@ -5,6 +5,13 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontAwesomeExtractor", "FontAwesomeExtractor\FontAwesomeExtractor.csproj", "{7BB8F3C9-22A4-4CD8-B656-BC7D840932F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D19D930D-0BDC-49E3-A1BB-C111A7A3457F}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Downloads\Font-Awesome-Cheat-C--master (1)\Font-Awesome-Cheat-C--master\LICENSE = ..\..\..\Downloads\Font-Awesome-Cheat-C--master (1)\Font-Awesome-Cheat-C--master\LICENSE
+		Output.cs = Output.cs
+		..\..\..\Downloads\Font-Awesome-Cheat-C--master (1)\Font-Awesome-Cheat-C--master\README.md = ..\..\..\Downloads\Font-Awesome-Cheat-C--master (1)\Font-Awesome-Cheat-C--master\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
