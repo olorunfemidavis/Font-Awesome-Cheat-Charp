@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace FontAwesomeExtractor
 {
@@ -17,35 +19,72 @@ namespace FontAwesomeExtractor
             //load html into variable
             htmlDoc.Load(path);
 
-            //Load the three sessions (solid, regular, brands ) into the var 
-            HtmlNodeCollection htmlSessions = htmlDoc.DocumentNode.SelectNodes("//section");
-            //Iterate through sessions to process.
-            Console.WriteLine($@"public class FontAwesome");
-            Console.WriteLine(@"{");
-            foreach (HtmlNode session in htmlSessions)
+            var destination = Path.Combine(Directory.GetCurrentDirectory(), "../../../Output.cs");
+            using (var fStream = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous))
             {
-                Console.WriteLine($@"public static class {Processor.Edit(session.Id)}");
-                Console.WriteLine(@"{");
-                HtmlNodeCollection session_articles = session.SelectNodes("//article");
-                //Iterate through the Article List to process
-                foreach (HtmlNode article in session_articles)
+                using (var sw = new StreamWriter(fStream))
                 {
+                    //Load the three sessions (solid, regular, brands ) into the var 
+                    HtmlNodeCollection htmlSessions = htmlDoc.DocumentNode.SelectNodes("//section");
+                    //Iterate through sessions to process.
+                    Output(sw, "public class FontAwesome");
 
-                    string title = article.Id;
-                    HtmlNode dlNode = article.ChildNodes[1];
-                    HtmlNode ddNode = dlNode.ChildNodes[5];
-                    string unicode = ddNode.InnerText;
-                    string output = $@" public static string {Processor.Edit(title)} = ""\u{unicode}"";"; //&#x
-                    Console.WriteLine(output);
+                    const string closeBrace = "}";
+                    const string openBrace = "{";
+                    Output(sw, openBrace);
+                    foreach (HtmlNode session in htmlSessions)
+                    {
+                        Output(sw, $"\tpublic static class {Processor.Edit(session.Id)}");
+                        Output(sw, $"\t{openBrace}");
+
+                        HtmlNodeCollection session_articles = session.SelectNodes("//article");
+
+                        // to exclude duplicates
+                        var hSet = new HashSet<string>();
+                        //Iterate through the Article List to process
+                        foreach (HtmlNode article in session_articles)
+                        {
+
+                            string title = article.Id;
+                            HtmlNode dlNode = article.ChildNodes[1];
+                            HtmlNode ddNode = dlNode.ChildNodes[5];
+                            string unicode = ddNode.InnerText;
+
+                            if (hSet.Add(unicode))
+                            {
+                                string output = $@" public static string {Processor.Edit(title)} = ""\u{unicode}"";"; //&#x
+                                Output(sw, $"\t\t{output}");
+                            }
+                        }
+                        hSet.Clear();
+
+                        Output(sw, $"\t{closeBrace}");
+
+                        Output(sw);
+                        Output(sw);
+                        Output(sw);
+                    }
+                    Output(sw, closeBrace);
+
+                    sw.Flush();
                 }
-                Console.WriteLine("}");
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
             }
-            Console.WriteLine("}");
 
             Console.ReadKey();
+        }
+
+        private static void Output(StreamWriter writer, string content = null)
+        {
+            if (content is null)
+            {
+                Console.Out.WriteLine();
+                writer.WriteLine();
+            }
+            else
+            {
+                Console.Out.WriteLine(content);
+                writer.WriteLine(content);
+            }
         }
     }
 }
